@@ -6,6 +6,8 @@ pre-commit:
       run: bun run lint -- --max-warnings=0 {staged_files}
     typecheck:
       run: bunx tsc -p tsconfig.json --noEmit
+    test:
+      run: bun run test
 
 
 commit-msg:
@@ -19,7 +21,7 @@ pre-push:
   commands:
     lint:
       run: bun run lint
-    # test:
-    #   run: bun run test
+    test:
+      run: bun run test
     build:
       run: bun run build
