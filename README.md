@@ -1,5 +1,7 @@
 # Free NanoBanana Template
 
+[![Tencent QQ](https://img.shields.io/badge/Tencent_QQ-%2312B7F5?style=for-the-badge&logo=qq&logoColor=white)](https://qm.qq.com/q/JNKEOfkUcA)
+
 ## Getting Started
 
 First, run the development server:
