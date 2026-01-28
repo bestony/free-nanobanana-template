@@ -21,3 +21,5 @@ pre-push:
       run: bun run lint
     # test:
     #   run: bun run test
+    build:
+      run: bun run build
