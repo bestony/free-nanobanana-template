@@ -15,6 +15,17 @@ pre-commit:
         if [ -n "$files" ]; then
           bun run lint -- --max-warnings=0 $files
         fi
+    complexity:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: |
+        if command -v rg >/dev/null 2>&1; then
+          files=$(printf "%s\n" {staged_files} | rg -v "^components/ui/")
+        else
+          files=$(printf "%s\n" {staged_files} | grep -v "^components/ui/")
+        fi
+        if [ -n "$files" ]; then
+          bun run lint -- --max-warnings=0 --rule 'complexity: [2, 10]' $files
+        fi
     typecheck:
       run: bunx tsc -p tsconfig.json --noEmit
     test:
