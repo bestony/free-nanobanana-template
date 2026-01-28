@@ -1,41 +1,13 @@
 # Free NanoBanana Template
 
-[![Tencent QQ](https://img.shields.io/badge/Tencent_QQ-%2312B7F5?style=for-the-badge&logo=qq&logoColor=white)](https://qm.qq.com/q/JNKEOfkUcA)
+[![Tencent QQ](https://img.shields.io/badge/Tencent_QQ-%2312B7F5?style=for-the-badge&logo=qq&logoColor=white)](https://qm.qq.com/q/JNKEOfkUcA)[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/pxDeGksA34)
 
-## Getting Started
+## What You Will Get?
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- A ready-to-use Nano Banana template;
+- Website code that can integrate billing and payments;
+- A site with integrated user system, email system, and content management system;
+- A high-quality codebase built by AI and expert engineers.
 
 ## LICENSE
 
