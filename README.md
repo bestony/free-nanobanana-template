@@ -1,6 +1,5 @@
 # Free NanoBanana Template
 
-
 ## Getting Started
 
 First, run the development server:

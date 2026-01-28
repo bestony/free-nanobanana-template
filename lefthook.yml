@@ -1,6 +1,9 @@
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
+    format:
+      run: bunx prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
     lint:
       glob: "*.{js,jsx,ts,tsx}"
       run: bun run lint -- --max-warnings=0 {staged_files}
@@ -9,12 +12,10 @@ pre-commit:
     test:
       run: bun run test
 
-
 commit-msg:
   commands:
     "lint commit message":
       run: bunx commitlint --edit {1}
-
 
 pre-push:
   parallel: true

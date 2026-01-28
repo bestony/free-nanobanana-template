@@ -13,7 +13,7 @@ const Configuration = {
    * Any rules defined here will override rules from @commitlint/config-conventional
    */
   rules: {
-    "type-enum": [2, "always", ["feat","ci","fix","test","docs"]],
+    "type-enum": [2, "always", ["feat", "ci", "fix", "test", "docs"]],
   },
   /*
    * Array of functions that return true if commitlint should ignore the given message.
