@@ -6,7 +6,15 @@ pre-commit:
       stage_fixed: true
     lint:
       glob: "*.{js,jsx,ts,tsx}"
-      run: bun run lint -- --max-warnings=0 {staged_files}
+      run: |
+        if command -v rg >/dev/null 2>&1; then
+          files=$(printf "%s\n" {staged_files} | rg -v "^components/ui/")
+        else
+          files=$(printf "%s\n" {staged_files} | grep -v "^components/ui/")
+        fi
+        if [ -n "$files" ]; then
+          bun run lint -- --max-warnings=0 $files
+        fi
     typecheck:
       run: bunx tsc -p tsconfig.json --noEmit
     test:

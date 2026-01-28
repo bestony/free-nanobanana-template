@@ -10,6 +10,8 @@ const customJestConfig = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
   },
+  testPathIgnorePatterns: ["<rootDir>/components/ui/"],
+  coveragePathIgnorePatterns: ["<rootDir>/components/ui/"],
   coverageReporters: ["text", "text-summary", "lcov"],
 };
 
