@@ -3,55 +3,30 @@ import Link from "next/link";
 export default function Navbar() {
   const navLinks = [
     {
-      href: "/auth/magic-link",
-      label: "Magic link",
-      title: "Email login without a password",
+      href: "/showcase",
+      label: "Showcase",
+      title: "Curated prompt showcase",
     },
     {
-      href: "/auth/forgot-password",
-      label: "Forgot password",
-      title: "Trigger email to reset forgotten password",
+      href: "/gallery",
+      label: "Gallery",
+      title: "Community gallery",
     },
     {
-      href: "/auth/two-factor",
-      label: "Two-factor",
-      title: "Two-factor authentication",
-    },
-    {
-      href: "/auth/recover-account",
-      label: "Recover account",
-      title: "Recover account via backup code",
-    },
-    {
-      href: "/auth/reset-password",
-      label: "Reset password",
-      title: "Set new password after receiving reset link",
-    },
-    {
-      href: "/auth/sign-out",
-      label: "Sign out",
-      title: "Log the user out of the application",
-    },
-    {
-      href: "/auth/callback",
-      label: "Auth callback",
-      title: "Internal route to handle Auth callbacks",
-    },
-    {
-      href: "/auth/accept-invitation",
-      label: "Accept invitation",
-      title: "Accept an invitation to an organization",
+      href: "/faq",
+      label: "FAQ",
+      title: "Frequently asked questions",
     },
   ];
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-sm">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6">
         <a className="group flex items-center gap-2" href="#">
           <span className="text-2xl group-hover:animate-bounce">🍌</span>
           <span className="text-xl font-bold tracking-tight">Nanobanana</span>
         </a>
-        <nav className="hidden items-center gap-4 md:flex">
+        <nav className="hidden items-center justify-center gap-6 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -63,7 +38,7 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-4">
           <Link
             className="hidden text-sm font-medium transition-colors hover:text-nano-gray md:block"
             href="/auth/sign-in"
