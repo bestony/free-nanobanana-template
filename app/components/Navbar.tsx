@@ -3,6 +3,11 @@ import Link from "next/link";
 export default function Navbar() {
   const navLinks = [
     {
+      href: "/",
+      label: "Home",
+      title: "Back to home",
+    },
+    {
       href: "/showcase",
       label: "Showcase",
       title: "Curated prompt showcase",
@@ -21,16 +26,16 @@ export default function Navbar() {
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-sm">
-      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6">
-        <a className="group flex items-center gap-2" href="#">
+      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[auto_1fr_auto] items-center px-6">
+        <Link className="group flex items-center gap-2" href="/">
           <span className="text-2xl group-hover:animate-bounce">🍌</span>
           <span className="text-xl font-bold tracking-tight">Nanobanana</span>
-        </a>
-        <nav className="hidden items-center justify-center gap-6 md:flex">
+        </Link>
+        <nav className="flex flex-wrap items-center justify-center gap-3 text-xs sm:gap-6 sm:text-sm">
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              className="text-sm font-medium text-nano-gray transition-colors hover:text-black"
+              className="font-medium text-nano-gray transition-colors hover:text-black"
               href={link.href}
               title={link.title}
             >
