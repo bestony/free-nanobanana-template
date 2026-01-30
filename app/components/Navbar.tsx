@@ -13,6 +13,11 @@ export default function Navbar() {
       title: "Curated prompt showcase",
     },
     {
+      href: "/pricing",
+      label: "Pricing",
+      title: "Plans for Nanobanana generation",
+    },
+    {
       href: "/gallery",
       label: "Gallery",
       title: "Community gallery",
