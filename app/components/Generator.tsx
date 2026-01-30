@@ -28,14 +28,14 @@ const presets = [
   },
 ];
 
-const models = ["Flux Schnell", "Nano v2", "Citrus XL"];
+const modelName = "Nanobanana";
 
 export default function Generator() {
   const [prompt, setPrompt] = useState("");
-  const [selectedModel, setSelectedModel] = useState(models[0]);
   const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
   const [generatedImage, setGeneratedImage] = useState(presets[0].image);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const helperText = useMemo(() => {
     if (selectedPreset === null)
@@ -49,25 +49,49 @@ export default function Generator() {
     setGeneratedImage(presets[index].image);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (isGenerating) return;
+    setErrorMessage(null);
     setIsGenerating(true);
 
+    const trimmedPrompt = prompt.trim();
     const fallbackPrompt = presets[0].prompt;
-    if (!prompt.trim()) {
+    const finalPrompt = trimmedPrompt || fallbackPrompt;
+
+    if (!trimmedPrompt) {
       setPrompt(fallbackPrompt);
       setSelectedPreset(0);
     }
 
-    const nextImage =
-      selectedPreset === null
-        ? presets[Math.floor(Math.random() * presets.length)].image
-        : presets[selectedPreset].image;
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: finalPrompt,
+        }),
+      });
 
-    window.setTimeout(() => {
-      setGeneratedImage(nextImage);
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null);
+        setErrorMessage(errorPayload?.error || "Generation failed.");
+        return;
+      }
+
+      const data = await response.json();
+      if (data?.image) {
+        setGeneratedImage(data.image);
+      } else {
+        setErrorMessage("No image returned. Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Network error. Please try again.");
+    } finally {
       setIsGenerating(false);
-    }, 650);
+    }
   };
 
   return (
@@ -103,19 +127,11 @@ export default function Generator() {
                   <span className="inline-flex h-2 w-2 rounded-full bg-nano-yellow" />
                   <span>Model</span>
                 </div>
-                <select
-                  className="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm text-nano-text shadow-sm"
-                  value={selectedModel}
-                  onChange={(event) => setSelectedModel(event.target.value)}
-                >
-                  {models.map((model) => (
-                    <option key={model} value={model}>
-                      {model}
-                    </option>
-                  ))}
-                </select>
+                <span className="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm text-nano-text shadow-sm">
+                  {modelName}
+                </span>
                 <span className="text-xs text-nano-gray">
-                  {selectedModel} • 1024×1024
+                  {modelName} • 1024×1024
                 </span>
               </div>
 
@@ -146,11 +162,15 @@ export default function Generator() {
                 <button
                   className="rounded-full bg-nano-yellow px-6 py-2 text-sm font-semibold text-black shadow-sm transition-all hover:brightness-95"
                   onClick={handleGenerate}
+                  disabled={isGenerating}
                   type="button"
                 >
                   {isGenerating ? "Generating..." : "Generate Image"}
                 </button>
               </div>
+              {errorMessage ? (
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              ) : null}
             </div>
 
             <div className="relative">
