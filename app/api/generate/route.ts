@@ -231,7 +231,9 @@ const storeGeneratedImage = async (options: {
   let blobUrl: string | undefined;
 
   try {
-    const imageBlob = new Blob([imageBuffer], { type: mimeType });
+    const imageBlob = new Blob([new Uint8Array(imageBuffer)], {
+      type: mimeType,
+    });
     const blob = await put(blobPathname, imageBlob, {
       access: "public",
       addRandomSuffix: true,
