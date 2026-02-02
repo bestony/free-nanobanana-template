@@ -27,7 +27,10 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.PAYLOAD_DATABASE_URL || "file:./payload.db",
+      url:
+        process.env.DATABASE_URL ||
+        process.env.PAYLOAD_DATABASE_URL ||
+        "file:./payload.db",
     },
     push: false,
   }),

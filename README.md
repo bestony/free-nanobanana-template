@@ -62,7 +62,7 @@ BLOB_READ_WRITE_TOKEN=your_blob_rw_token
 # Payload CMS (required)
 PAYLOAD_SECRET=your_payload_secret
 # Optional: defaults to local sqlite file
-PAYLOAD_DATABASE_URL=file:./payload.db
+DATABASE_URL=file:./payload.db
 
 # Better Auth / Turso (required for auth)
 TURSO_DATABASE_URL=libsql://...
@@ -112,7 +112,7 @@ GITHUB_CLIENT_SECRET=your_github_client_secret
 
 ## Database Notes
 
-- Payload uses SQLite via `PAYLOAD_DATABASE_URL` (defaults to `payload.db`).
+- Payload uses SQLite via `DATABASE_URL` (defaults to `payload.db`).
 - Better Auth uses Turso (libSQL) configured in `lib/auth.ts`.
 
 ## Deployment
