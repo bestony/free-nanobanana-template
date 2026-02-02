@@ -1,4 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
+import { put } from "@vercel/blob";
 import config from "@payload-config";
 import { NextResponse } from "next/server";
 import { getPayload } from "payload";
@@ -70,12 +71,13 @@ type ImageInfo = {
   dataUrl: string;
   mimeType: string;
   imageBuffer: Buffer;
-  filename: string;
+  blobPathname: string;
 };
 
 type StorageResult = {
   stored: boolean;
   imageRecordId?: string | number;
+  blobUrl?: string;
 };
 
 const jsonError = (
@@ -203,13 +205,13 @@ const buildImageInfo = (inlineData: InlineData): ImageInfo => {
   const dataUrl = `data:${mimeType};base64,${inlineData.data}`;
   const imageBuffer = Buffer.from(inlineData.data ?? "", "base64");
   const extension = mimeExtensionMap[mimeType] || "png";
-  const filename = `generated-${Date.now()}.${extension}`;
+  const blobPathname = `nanobanana/${Date.now()}.${extension}`;
 
   return {
     dataUrl,
     mimeType,
     imageBuffer,
-    filename,
+    blobPathname,
   };
 };
 
@@ -218,40 +220,30 @@ const storeGeneratedImage = async (options: {
   textOutput: string;
   imageBuffer: Buffer;
   mimeType: string;
-  filename: string;
+  blobPathname: string;
 }): Promise<StorageResult> => {
-  const { prompt, textOutput, imageBuffer, mimeType, filename } = options;
+  const { prompt, textOutput, imageBuffer, mimeType, blobPathname } = options;
   const title = buildTitle(prompt);
   const description = normalizePrompt(textOutput || prompt);
 
   let stored = false;
   let imageRecordId: string | number | undefined;
+  let blobUrl: string | undefined;
 
   try {
-    const payload = await getPayload({ config });
-    const mediaDoc = await payload.create({
-      collection: "media",
-      data: {
-        alt: title,
-        ...(textOutput?.trim()
-          ? {
-              caption: textOutput.trim(),
-            }
-          : {}),
-      },
-      file: {
-        data: imageBuffer,
-        mimetype: mimeType,
-        name: filename,
-        size: imageBuffer.length,
-      },
+    const imageBlob = new Blob([imageBuffer], { type: mimeType });
+    const blob = await put(blobPathname, imageBlob, {
+      access: "public",
+      addRandomSuffix: true,
     });
+    blobUrl = blob.url;
 
+    const payload = await getPayload({ config });
     const imageRecord = await payload.create({
       collection: "image-records",
       data: {
         title,
-        image: mediaDoc.id,
+        imageUrl: blob.url,
         description,
       },
     });
@@ -262,7 +254,7 @@ const storeGeneratedImage = async (options: {
     console.error("Failed to store generated image:", storageError);
   }
 
-  return { stored, imageRecordId };
+  return { stored, imageRecordId, blobUrl };
 };
 
 export async function POST(request: Request) {
@@ -294,7 +286,7 @@ export async function POST(request: Request) {
       textOutput: extracted.textOutput,
       imageBuffer: imageInfo.imageBuffer,
       mimeType: imageInfo.mimeType,
-      filename: imageInfo.filename,
+      blobPathname: imageInfo.blobPathname,
     });
 
     return NextResponse.json({
@@ -303,6 +295,7 @@ export async function POST(request: Request) {
       text: buildTextValue(extracted.textOutput),
       stored: storageResult.stored,
       imageRecordId: storageResult.imageRecordId,
+      blobUrl: storageResult.blobUrl,
     });
   } catch (error) {
     console.error("Generate API error:", error);

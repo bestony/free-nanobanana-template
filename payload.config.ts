@@ -29,6 +29,7 @@ export default buildConfig({
     client: {
       url: process.env.PAYLOAD_DATABASE_URL || "file:./payload.db",
     },
+    push: false,
   }),
   sharp,
 });

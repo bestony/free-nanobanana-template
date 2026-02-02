@@ -18,6 +18,10 @@ export const ImageRecords: CollectionConfig = {
       name: "image",
       type: "relationship",
       relationTo: "media",
+    },
+    {
+      name: "imageUrl",
+      type: "text",
       required: true,
     },
     {
