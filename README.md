@@ -28,7 +28,9 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,PAYLOAD_SECRET,BETTER_AUTH_SECRET,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET&envDescription=Key%20parameters%20for%20payments%20and%20image%20generation.)
 
-> 提示：部署后请在 Vercel 中启用 Blob，并生成 `BLOB_READ_WRITE_TOKEN`（Vercel Storage），加入环境变量。
+> 提示：部署后请在 Vercel 中启用 Blob，并自动生成 `BLOB_READ_WRITE_TOKEN`（Vercel Storage），加入环境变量。
+> 提示：部署后请在 Vercel 中启用 Neon Database，并自动生成 `DATABASE_URL`，加入环境变量；
+> 完成上述配置后，重新部署即可；
 
 1. 安装依赖
 
