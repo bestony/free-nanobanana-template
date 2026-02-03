@@ -26,6 +26,10 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 
 ## Quick Start
 
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=ZENMUX_API_KEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20and%20auth.)
+
+> Note: After deploy, enable Vercel Blob in your project and create a `BLOB_READ_WRITE_TOKEN` (Vercel Storage), then add it to Environment Variables.
+
 1. Install dependencies
 
 ```
