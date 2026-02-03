@@ -12,7 +12,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 - Nano Banana image generation via Gemini (ZenMux / Vertex AI).
 - Vercel Blob storage for generated images.
 - Payload CMS admin for browsing generated images and metadata.
-- Better Auth with email/password and GitHub provider support.
+- Better Auth with email/password, Google login, and One Tap support.
 - Stripe subscriptions for Pro plan billing.
 - Next.js App Router with Tailwind + shadcn UI primitives.
 - Bun-first scripts for installs and tooling.
@@ -72,9 +72,10 @@ DATABASE_URL=
 # Better Auth / Turso (required for auth)
 BETTER_AUTH_SECRET=your_better_auth_secret
 
-# GitHub OAuth (optional)
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
+# Google OAuth + One Tap (optional)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
 # Stripe Billing (required for subscriptions)
 STRIPE_SECRET_KEY=sk_test_...

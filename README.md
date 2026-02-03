@@ -11,7 +11,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 - 基于 Gemini（ZenMux / Vertex AI）的 Nano Banana 图像生成。
 - Vercel Blob 存储生成的图片。
 - Payload CMS 后台管理生成记录与元数据。
-- Better Auth（邮箱/密码 + GitHub）登录支持。
+- Better Auth（邮箱/密码 + Google 登录 + One Tap）支持。
 - Stripe 订阅计费（Pro 计划）。
 - Next.js App Router + Tailwind + shadcn UI primitives。
 - Bun 优先的脚本与工具链。
@@ -74,6 +74,11 @@ DATABASE_URL=
 BETTER_AUTH_SECRET=your_better_auth_secret
 TURSO_DATABASE_URL=libsql://...
 TURSO_AUTH_TOKEN=your_turso_token
+
+# Google OAuth + One Tap（可选）
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
 
 # Stripe 订阅计费（订阅必填）
