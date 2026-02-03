@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import NavbarAuth from "./NavbarAuth";
+
 export default function Navbar() {
   const navLinks = [
     {
@@ -49,20 +51,7 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="flex items-center justify-end gap-4">
-          <Link
-            className="hidden text-sm font-medium transition-colors hover:text-nano-gray md:block"
-            href="/auth/sign-in"
-            title="Sign in via email/password and social providers"
-          >
-            Sign in
-          </Link>
-          <Link
-            className="rounded-full bg-nano-yellow px-5 py-2.5 text-sm font-semibold text-black shadow-sm transition-all hover:brightness-95"
-            href="/auth/sign-up"
-            title="New account registration"
-          >
-            Sign up
-          </Link>
+          <NavbarAuth />
         </div>
       </div>
     </header>

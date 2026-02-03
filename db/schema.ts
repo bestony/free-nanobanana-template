@@ -87,9 +87,76 @@ export const verification = sqliteTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const stripeCustomer = sqliteTable(
+  "stripe_customer",
+  {
+    userId: text("user_id")
+      .notNull()
+      .primaryKey()
+      .references(() => user.id, { onDelete: "cascade" }),
+    stripeCustomerId: text("stripe_customer_id").notNull().unique(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("stripe_customer_id_idx").on(table.stripeCustomerId)],
+);
+
+export const subscription = sqliteTable(
+  "subscription",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    stripeCustomerId: text("stripe_customer_id").notNull(),
+    priceId: text("price_id").notNull(),
+    status: text("status").notNull(),
+    currentPeriodEnd: integer("current_period_end", { mode: "timestamp_ms" }),
+    cancelAtPeriodEnd: integer("cancel_at_period_end", { mode: "boolean" })
+      .default(false)
+      .notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("subscription_userId_idx").on(table.userId),
+    index("subscription_customer_idx").on(table.stripeCustomerId),
+  ],
+);
+
+export const generation = sqliteTable(
+  "generation",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    prompt: text("prompt").notNull(),
+    imageUrl: text("image_url").notNull(),
+    imageRecordId: text("image_record_id"),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  (table) => [
+    index("generation_userId_idx").on(table.userId),
+    index("generation_createdAt_idx").on(table.createdAt),
+  ],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  subscriptions: many(subscription),
+  generations: many(generation),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -102,6 +169,27 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const stripeCustomerRelations = relations(stripeCustomer, ({ one }) => ({
+  user: one(user, {
+    fields: [stripeCustomer.userId],
+    references: [user.id],
+  }),
+}));
+
+export const subscriptionRelations = relations(subscription, ({ one }) => ({
+  user: one(user, {
+    fields: [subscription.userId],
+    references: [user.id],
+  }),
+}));
+
+export const generationRelations = relations(generation, ({ one }) => ({
+  user: one(user, {
+    fields: [generation.userId],
     references: [user.id],
   }),
 }));

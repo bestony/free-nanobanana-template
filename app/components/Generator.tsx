@@ -95,7 +95,7 @@ export default function Generator() {
   };
 
   return (
-    <section className="bg-white px-6 pb-24">
+    <section className="bg-white px-6 pb-24" id="generator">
       <div className="mx-auto max-w-6xl">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-nano-text md:text-4xl">

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import path from "path";
 import { fileURLToPath } from "url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
@@ -11,6 +12,11 @@ import { Users } from "./payload/collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+const payloadDatabaseUrl = process.env.DATABASE_URL;
+
+if (!payloadDatabaseUrl) {
+  throw new Error("DATABASE_URL is required to run Payload CMS.");
+}
 
 export default buildConfig({
   admin: {
@@ -27,10 +33,7 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url:
-        process.env.DATABASE_URL ||
-        process.env.PAYLOAD_DATABASE_URL ||
-        "file:./payload.db",
+      url: payloadDatabaseUrl,
     },
     push: false,
   }),

@@ -1,5 +1,13 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { useSession } from "@/lib/auth-client";
+
 const tiers = [
   {
+    id: "free",
     name: "Free",
     price: "Free",
     description: "For trying Nanobanana generation.",
@@ -7,8 +15,10 @@ const tiers = [
     features: ["1 generation per day", "Watermarked outputs"],
   },
   {
+    id: "pro",
     name: "Pro",
-    price: "Pro",
+    price: "$10",
+    priceNote: "per month",
     description: "Best for creators generating daily.",
     cta: "Upgrade to Pro",
     badge: "Most popular",
@@ -16,6 +26,7 @@ const tiers = [
     features: ["30 generations per day", "No watermark", "2K & 4K exports"],
   },
   {
+    id: "enterprise",
     name: "Enterprise",
     price: "Custom",
     description: "Custom plans for teams and studios.",
@@ -25,6 +36,60 @@ const tiers = [
 ];
 
 export default function Pricing() {
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const [activeTier, setActiveTier] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCheckout = async () => {
+    if (isPending || activeTier) return;
+
+    if (!session?.user) {
+      router.push("/auth/sign-in");
+      return;
+    }
+
+    setError(null);
+    setActiveTier("pro");
+
+    try {
+      const response = await fetch("/api/billing/checkout", {
+        method: "POST",
+      });
+      const payload = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(payload?.error || "Unable to start checkout.");
+      }
+
+      if (payload?.url) {
+        window.location.href = payload.url;
+        return;
+      }
+
+      throw new Error("Checkout session missing.");
+    } catch (checkoutError) {
+      const message =
+        checkoutError instanceof Error
+          ? checkoutError.message
+          : "Unable to start checkout.";
+      setError(message);
+    } finally {
+      setActiveTier(null);
+    }
+  };
+
+  const handleFree = () => {
+    if (isPending) return;
+
+    if (session?.user) {
+      router.push("/#generator");
+      return;
+    }
+
+    router.push("/auth/sign-up");
+  };
+
   return (
     <section className="bg-white px-6 py-24" id="pricing">
       <div className="mx-auto max-w-6xl space-y-12">
@@ -73,6 +138,11 @@ export default function Pricing() {
                 <div className="mt-6 text-3xl font-bold text-nano-text">
                   {tier.price}
                 </div>
+                {tier.priceNote ? (
+                  <p className="mt-1 text-xs text-nano-gray">
+                    {tier.priceNote}
+                  </p>
+                ) : null}
               </div>
               <div className="flex flex-1 flex-col justify-between gap-6 p-6">
                 <ul className="space-y-3 text-sm text-nano-gray">
@@ -89,14 +159,29 @@ export default function Pricing() {
                       ? "bg-nano-yellow text-black shadow-sm hover:brightness-95"
                       : "border border-gray-200 text-black hover:bg-gray-50"
                   }`}
+                  onClick={() => {
+                    if (tier.id === "pro") {
+                      handleCheckout();
+                    } else if (tier.id === "free") {
+                      handleFree();
+                    }
+                  }}
+                  disabled={
+                    activeTier === tier.id || (tier.id === "pro" && isPending)
+                  }
                   type="button"
                 >
-                  {tier.cta}
+                  {activeTier === tier.id && tier.id === "pro"
+                    ? "Redirecting..."
+                    : tier.cta}
                 </button>
               </div>
             </div>
           ))}
         </div>
+        {error ? (
+          <p className="text-center text-sm text-red-500">{error}</p>
+        ) : null}
       </div>
     </section>
   );

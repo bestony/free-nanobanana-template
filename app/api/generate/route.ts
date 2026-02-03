@@ -1,8 +1,13 @@
+import { randomUUID } from "crypto";
 import { GoogleGenAI, Modality } from "@google/genai";
 import { put } from "@vercel/blob";
 import config from "@payload-config";
 import { NextResponse } from "next/server";
 import { getPayload } from "payload";
+
+import db from "@/db";
+import { generation } from "@/db/schema";
+import { auth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -267,6 +272,8 @@ export async function POST(request: Request) {
   const promptResult = getPromptFromBody(parsedBody.body);
   if (!promptResult.ok) return promptResult.response;
 
+  const session = await auth.api.getSession({ headers: request.headers });
+
   const apiKeyResult = getApiKey();
   if (!apiKeyResult.ok) return apiKeyResult.response;
 
@@ -290,6 +297,23 @@ export async function POST(request: Request) {
       mimeType: imageInfo.mimeType,
       blobPathname: imageInfo.blobPathname,
     });
+
+    if (session?.user?.id && storageResult.blobUrl) {
+      try {
+        await db.insert(generation).values({
+          id: randomUUID(),
+          userId: session.user.id,
+          prompt: promptResult.prompt,
+          imageUrl: storageResult.blobUrl,
+          imageRecordId: storageResult.imageRecordId
+            ? String(storageResult.imageRecordId)
+            : null,
+          createdAt: new Date(),
+        });
+      } catch (storeError) {
+        console.error("Failed to store generation record:", storeError);
+      }
+    }
 
     return NextResponse.json({
       image: imageInfo.dataUrl,

@@ -15,8 +15,8 @@ export default async function AccountPage({
   const { path } = await params;
 
   return (
-    <main className="container p-4 md:p-6">
+    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm md:p-8">
       <AccountView path={path} />
-    </main>
+    </div>
   );
 }
