@@ -27,7 +27,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 
 ## Quick Start
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,PAYLOAD_SECRET,BETTER_AUTH_SECRET,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET&envDescription=Key%20parameters%20for%20payments%20and%20image%20generation.)
 
 > Note: After deploy, enable Vercel Blob in your project and create a `BLOB_READ_WRITE_TOKEN` (Vercel Storage), then add it to Environment Variables.
 
@@ -66,11 +66,11 @@ BLOB_READ_WRITE_TOKEN=your_blob_rw_token
 
 # Payload CMS (required)
 PAYLOAD_SECRET=your_payload_secret
-DATABASE_URL=file:./payload.db
+# database
+DATABASE_URL=
 
 # Better Auth / Turso (required for auth)
-TURSO_DATABASE_URL=libsql://...
-TURSO_AUTH_TOKEN=your_turso_token
+BETTER_AUTH_SECRET=your_better_auth_secret
 
 # GitHub OAuth (optional)
 GITHUB_CLIENT_ID=your_github_client_id

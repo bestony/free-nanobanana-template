@@ -26,7 +26,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 
 ## 快速开始
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,PAYLOAD_SECRET,BETTER_AUTH_SECRET,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET&envDescription=Key%20parameters%20for%20payments%20and%20image%20generation.)
 
 > 提示：部署后请在 Vercel 中启用 Blob，并生成 `BLOB_READ_WRITE_TOKEN`（Vercel Storage），加入环境变量。
 
@@ -65,15 +65,14 @@ BLOB_READ_WRITE_TOKEN=your_blob_rw_token
 
 # Payload CMS（必填）
 PAYLOAD_SECRET=your_payload_secret
-DATABASE_URL=file:./payload.db
+# 数据库基础信息
+DATABASE_URL=
 
 # Better Auth / Turso（认证必填）
+BETTER_AUTH_SECRET=your_better_auth_secret
 TURSO_DATABASE_URL=libsql://...
 TURSO_AUTH_TOKEN=your_turso_token
 
-# GitHub OAuth（可选）
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
 
 # Stripe 订阅计费（订阅必填）
 STRIPE_SECRET_KEY=sk_test_...
