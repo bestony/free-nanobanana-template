@@ -26,7 +26,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 
 ## 快速开始
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=ZENMUX_API_KEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
 
 > 提示：部署后请在 Vercel 中启用 Blob，并生成 `BLOB_READ_WRITE_TOKEN`（Vercel Storage），加入环境变量。
 
@@ -56,9 +56,9 @@ http://localhost:3000
 
 ```
 # 图像生成（必填）
-ZENMUX_API_KEY=your_zenmux_key
+VERTEX_AI_APIKEY=your_zenmux_key
 # 可选：覆盖默认的 base URL
-ZENMUX_BASE_URL=https://zenmux.ai/api/vertex-ai
+VERTEX_AI_BASE_URL=https://zenmux.ai/api/vertex-ai
 
 # Vercel Blob（上传必填）
 BLOB_READ_WRITE_TOKEN=your_blob_rw_token

@@ -12,7 +12,7 @@ import { auth } from "@/lib/auth";
 export const runtime = "nodejs";
 
 const MODEL_ID = "google/gemini-3-pro-image-preview";
-const ZENMUX_BASE_URL = "https://zenmux.ai/api/vertex-ai";
+const VERTEX_AI_BASE_URL = "https://zenmux.ai/api/vertex-ai";
 const ZENMUX_API_VERSION = "v1";
 
 const mimeExtensionMap: Record<string, string> = {
@@ -115,11 +115,11 @@ const getPromptFromBody = (body: GenerateRequest): PromptResult => {
 };
 
 const getApiKey = (): ApiKeyResult => {
-  const apiKey = process.env.ZENMUX_API_KEY;
+  const apiKey = process.env.VERTEX_AI_APIKEY;
   if (!apiKey) {
     return {
       ok: false,
-      response: jsonError("ZENMUX_API_KEY is not set.", 500),
+      response: jsonError("VERTEX_AI_APIKEY is not set.", 500),
     };
   }
   return { ok: true, apiKey };
@@ -131,7 +131,7 @@ const createClient = (apiKey: string) =>
     vertexai: true,
     httpOptions: {
       apiVersion: ZENMUX_API_VERSION,
-      baseUrl: process.env.ZENMUX_BASE_URL || ZENMUX_BASE_URL,
+      baseUrl: process.env.VERTEX_AI_BASE_URL || VERTEX_AI_BASE_URL,
     },
   });
 

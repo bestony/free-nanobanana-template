@@ -27,7 +27,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 
 ## Quick Start
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=ZENMUX_API_KEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,BLOB_READ_WRITE_TOKEN,PAYLOAD_SECRET,DATABASE_URL,TURSO_DATABASE_URL,TURSO_AUTH_TOKEN,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_ID_PRO&envDescription=Set%20required%20env%20vars%20for%20image%20generation%2C%20storage%2C%20auth%2C%20and%20billing.)
 
 > Note: After deploy, enable Vercel Blob in your project and create a `BLOB_READ_WRITE_TOKEN` (Vercel Storage), then add it to Environment Variables.
 
@@ -57,9 +57,9 @@ Create `.env` or `.env.local` and set the following:
 
 ```
 # Image generation (required)
-ZENMUX_API_KEY=your_zenmux_key
+VERTEX_AI_APIKEY=your_zenmux_key
 # Optional: override the default base URL
-ZENMUX_BASE_URL=https://zenmux.ai/api/vertex-ai
+VERTEX_AI_BASE_URL=https://zenmux.ai/api/vertex-ai
 
 # Vercel Blob (required for uploads)
 BLOB_READ_WRITE_TOKEN=your_blob_rw_token
