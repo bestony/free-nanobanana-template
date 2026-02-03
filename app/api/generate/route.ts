@@ -2,18 +2,22 @@ import { randomUUID } from "crypto";
 import { GoogleGenAI, Modality } from "@google/genai";
 import { put } from "@vercel/blob";
 import config from "@payload-config";
+import { and, eq, gte, lt, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getPayload } from "payload";
 
 import db from "@/db";
 import { generation } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { getSubscriptionByUserId } from "@/lib/billing";
 
 export const runtime = "nodejs";
 
 const MODEL_ID = "google/gemini-3-pro-image-preview";
 const VERTEX_AI_BASE_URL = "https://zenmux.ai/api/vertex-ai";
 const ZENMUX_API_VERSION = "v1";
+const DAILY_LIMIT_FREE = 3;
+const DAILY_LIMIT_PRO = 30;
 
 const mimeExtensionMap: Record<string, string> = {
   "image/avif": "avif",
@@ -264,6 +268,35 @@ const storeGeneratedImage = async (options: {
   return { stored, imageRecordId, blobUrl };
 };
 
+const getUtcDayWindow = (date: Date) => {
+  const startOfDay = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+  );
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setUTCDate(endOfDay.getUTCDate() + 1);
+  return { startOfDay, endOfDay };
+};
+
+const getDailyGenerationCount = async (
+  userId: string,
+  startOfDay: Date,
+  endOfDay: Date,
+) => {
+  const [record] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(generation)
+    .where(
+      and(
+        eq(generation.userId, userId),
+        gte(generation.createdAt, startOfDay),
+        lt(generation.createdAt, endOfDay),
+      ),
+    )
+    .limit(1);
+
+  return Number(record?.count ?? 0);
+};
+
 export async function POST(request: Request) {
   const parsedBody = await parseRequestBody(request);
   if (!parsedBody.ok) return parsedBody.response;
@@ -273,6 +306,33 @@ export async function POST(request: Request) {
   if (!promptResult.ok) return promptResult.response;
 
   const session = await auth.api.getSession({ headers: request.headers });
+  if (!session?.user?.id) {
+    return jsonError("Please sign in to generate images.", 401);
+  }
+
+  const subscription = await getSubscriptionByUserId(session.user.id);
+  const isPro =
+    subscription?.status === "active" || subscription?.status === "trialing";
+  const dailyLimit = isPro ? DAILY_LIMIT_PRO : DAILY_LIMIT_FREE;
+  const { startOfDay, endOfDay } = getUtcDayWindow(new Date());
+  const dailyCount = await getDailyGenerationCount(
+    session.user.id,
+    startOfDay,
+    endOfDay,
+  );
+
+  if (dailyCount >= dailyLimit) {
+    return jsonError(
+      `Daily generation limit reached (${dailyLimit}/day).`,
+      429,
+      {
+        limit: dailyLimit,
+        remaining: 0,
+        plan: isPro ? "pro" : "free",
+        resetAt: endOfDay.toISOString(),
+      },
+    );
+  }
 
   const apiKeyResult = getApiKey();
   if (!apiKeyResult.ok) return apiKeyResult.response;

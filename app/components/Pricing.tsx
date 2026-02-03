@@ -12,7 +12,7 @@ const tiers = [
     price: "Free",
     description: "For trying Nanobanana generation.",
     cta: "Start for free",
-    features: ["1 generation per day", "Watermarked outputs"],
+    features: ["3 generations per day", "Watermarked outputs"],
   },
   {
     id: "pro",
