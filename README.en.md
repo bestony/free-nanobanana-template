@@ -27,7 +27,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 
 ## Quick Start
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=VERTEX_AI_APIKEY,PAYLOAD_SECRET,BETTER_AUTH_SECRET,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET&envDescription=Key%20parameters%20for%20payments%20and%20image%20generation.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=PAYLOAD_SECRET,BETTER_AUTH_SECRET&envDescription=Core%20secrets%20required%20to%20boot%20the%20app.)
 
 > Note: After deploy, enable Vercel Blob in your project and create a `BLOB_READ_WRITE_TOKEN` (Vercel Storage), then add it to Environment Variables.
 
@@ -56,7 +56,7 @@ http://localhost:3000
 Create `.env` or `.env.local` and set the following:
 
 ```
-# Image generation (required)
+# Image generation (optional; required to enable generation)
 VERTEX_AI_APIKEY=your_zenmux_key
 # Optional: override the default base URL
 VERTEX_AI_BASE_URL=https://zenmux.ai/api/vertex-ai
@@ -77,7 +77,7 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
-# Stripe Billing (required for subscriptions)
+# Stripe Billing (optional; required to enable subscriptions)
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICE_ID_PRO=price_...

@@ -43,6 +43,10 @@ export const getOrCreateStripeCustomerId = async (options: {
   email?: string | null;
   name?: string | null;
 }) => {
+  if (!stripe) {
+    throw new Error("Stripe is not configured.");
+  }
+
   const existing = await getStripeCustomerIdForUser(options.userId);
   if (existing) return existing;
 

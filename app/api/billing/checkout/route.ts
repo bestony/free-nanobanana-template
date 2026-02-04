@@ -13,10 +13,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  if (!stripe) {
+    return NextResponse.json(
+      { error: "Stripe is not configured." },
+      { status: 503 },
+    );
+  }
+
   if (!PRO_PRICE_ID) {
     return NextResponse.json(
       { error: "STRIPE_PRICE_ID_PRO is not set." },
-      { status: 500 },
+      { status: 503 },
     );
   }
 

@@ -26,7 +26,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 
 ## 快速开始
 
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=PAYLOAD_SECRET,BETTER_AUTH_SECRET&envDescription=Key%20parameters%20for%20payments%20and%20image%20generation.)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=http://github.com/bestony/free-nanobanana-template&env=PAYLOAD_SECRET,BETTER_AUTH_SECRET&envDescription=Core%20secrets%20required%20to%20boot%20the%20app.)
 
 > 部署时，你会被要求 生成 PAYLOAD_SECRET 和 BETTER_AUTH_SECRET，可以在 https://randomkeygen.com/password 生成两个全新的并粘贴在其中。这两个 Secret 用于保护你的加密数据安全。
 
@@ -59,7 +59,7 @@ http://localhost:3000
 创建 `.env` 或 `.env.local` 并设置如下变量：
 
 ```
-# 图像生成（必填）
+# 图像生成（可选，启用生成必填）
 VERTEX_AI_APIKEY=your_zenmux_key
 # 可选：覆盖默认的 base URL
 VERTEX_AI_BASE_URL=https://zenmux.ai/api/vertex-ai
@@ -83,7 +83,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 
 
-# Stripe 订阅计费（订阅必填）
+# Stripe 订阅计费（可选，启用订阅必填）
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICE_ID_PRO=price_...

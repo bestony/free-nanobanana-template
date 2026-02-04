@@ -13,6 +13,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  if (!stripe) {
+    return NextResponse.json(
+      { error: "Stripe is not configured." },
+      { status: 503 },
+    );
+  }
+
   const origin = request.headers.get("origin") ?? new URL(request.url).origin;
 
   try {
