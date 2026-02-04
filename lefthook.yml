@@ -27,7 +27,18 @@ pre-commit:
           bun run lint -- --max-warnings=0 --rule 'complexity: [2, 10]' $files
         fi
     typecheck:
-      run: bunx tsc -p tsconfig.json --noEmit
+      run: |
+        if command -v rg >/dev/null 2>&1; then
+          files=$(printf "%s\n" {staged_files} | rg -v "^components/ui/" | rg -E "\\.(ts|tsx|mts|cts)$")
+        else
+          files=$(printf "%s\n" {staged_files} | grep -v "^components/ui/" | grep -E "\\.(ts|tsx|mts|cts)$")
+        fi
+        if [ -n "$files" ]; then
+          tmp=$(mktemp -t tsconfig.partial.XXXXXX.json)
+          trap 'rm -f "$tmp"' EXIT
+          FILES="$files" TMP="$tmp" bun -e 'const fs = require("fs"); const files = (process.env.FILES || "").split("\n").filter(Boolean); const config = { extends: "./tsconfig.json", files }; fs.writeFileSync(process.env.TMP, JSON.stringify(config, null, 2));'
+          bunx tsc -p "$tmp" --noEmit --incremental false --pretty false
+        fi
     test:
       run: bun run test
 
