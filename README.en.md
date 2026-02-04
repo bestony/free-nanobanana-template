@@ -22,7 +22,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 - Next.js 16 / React 19
 - Payload CMS 3 (SQLite adapter)
 - Vercel Blob SDK
-- Better Auth + Drizzle (Turso / libSQL)
+- Better Auth + Drizzle
 - Tailwind CSS
 
 ## Quick Start
@@ -69,7 +69,7 @@ PAYLOAD_SECRET=your_payload_secret
 # database
 DATABASE_URL=
 
-# Better Auth / Turso (required for auth)
+# Better Auth (required for auth)
 BETTER_AUTH_SECRET=your_better_auth_secret
 
 # Google OAuth + One Tap (optional)
@@ -123,7 +123,6 @@ STRIPE_PRICE_ID_PRO=price_...
 ## Database Notes
 
 - Payload uses `DATABASE_URL` (required).
-- Better Auth uses Turso (libSQL) configured in `lib/auth.ts`.
 
 ## Billing Notes
 

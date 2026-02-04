@@ -21,7 +21,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 - Next.js 16 / React 19
 - Payload CMS 3（SQLite 适配器）
 - Vercel Blob SDK
-- Better Auth + Drizzle（Turso / libSQL）
+- Better Auth + Drizzle
 - Tailwind CSS
 
 ## 快速开始
@@ -72,10 +72,8 @@ PAYLOAD_SECRET=your_payload_secret
 # 数据库基础信息
 DATABASE_URL=
 
-# Better Auth / Turso（认证必填）
+# Better Auth（认证必填）
 BETTER_AUTH_SECRET=your_better_auth_secret
-TURSO_DATABASE_URL=libsql://...
-TURSO_AUTH_TOKEN=your_turso_token
 
 # Google OAuth + One Tap（可选）
 GOOGLE_CLIENT_ID=your_google_client_id
@@ -129,7 +127,6 @@ STRIPE_PRICE_ID_PRO=price_...
 ## 数据库说明
 
 - Payload 使用 `DATABASE_URL`（必填）。
-- Better Auth 使用 Turso（libSQL），配置见 `lib/auth.ts`。
 
 ## 订阅计费说明
 
