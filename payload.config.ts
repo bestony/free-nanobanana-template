@@ -1,7 +1,7 @@
 import "dotenv/config";
 import path from "path";
 import { fileURLToPath } from "url";
-import { sqliteAdapter } from "@payloadcms/db-sqlite";
+import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
@@ -31,9 +31,9 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
-  db: sqliteAdapter({
-    client: {
-      url: payloadDatabaseUrl,
+  db: postgresAdapter({
+    pool: {
+      connectionString: payloadDatabaseUrl,
     },
     push: false,
   }),

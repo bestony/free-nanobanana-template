@@ -1,19 +1,12 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1769586468818,
-      "tag": "0000_giant_rick_jones",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1770077287449,
-      "tag": "0001_add_billing_and_generations",
+      "version": "7",
+      "when": 1770338468571,
+      "tag": "0000_rare_thundra",
       "breakpoints": true
     }
   ]

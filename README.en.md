@@ -20,7 +20,7 @@ image generation API, Vercel Blob storage, and Payload CMS for managing records.
 ## Tech Stack
 
 - Next.js 16 / React 19
-- Payload CMS 3 (SQLite adapter)
+- Payload CMS 3 (PostgreSQL adapter)
 - Vercel Blob SDK
 - Better Auth + Drizzle
 - Tailwind CSS
@@ -104,7 +104,7 @@ STRIPE_PRICE_ID_PRO=price_...
 - `payload/collections/`: Payload collections
 - `__tests__/`: Jest tests
 - `public/`: static assets
-- `payload.db`: local Payload SQLite database (default)
+- Database connection: PostgreSQL via `DATABASE_URL`
 
 ## Image Generation and Storage
 
@@ -122,7 +122,7 @@ STRIPE_PRICE_ID_PRO=price_...
 
 ## Database Notes
 
-- Payload uses `DATABASE_URL` (required).
+- Payload and Drizzle both use `DATABASE_URL` (required, PostgreSQL).
 
 ## Billing Notes
 
@@ -140,8 +140,7 @@ STRIPE_PRICE_ID_PRO=price_...
 ## Troubleshooting
 
 - Payload init error: `index ... already exists`
-  - If you change schema frequently, consider resetting `payload.db`
-    or temporarily enabling schema push in `payload.config.ts`.
+  - Ensure `DATABASE_URL` points to a reachable PostgreSQL instance and migrations are applied.
 - Blob upload fails
   - Ensure `BLOB_READ_WRITE_TOKEN` is present and valid.
 

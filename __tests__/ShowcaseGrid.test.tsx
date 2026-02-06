@@ -3,9 +3,9 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import ShowcaseGrid from "@/app/components/ShowcaseGrid";
 
 describe("ShowcaseGrid", () => {
-  const setClipboard = (clipboard: Clipboard | undefined) => {
+  const setClipboard = (clipboard: Partial<Clipboard> | undefined) => {
     Object.defineProperty(window.navigator, "clipboard", {
-      value: clipboard,
+      value: clipboard as Clipboard | undefined,
       configurable: true,
       writable: true,
     });

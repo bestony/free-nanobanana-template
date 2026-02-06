@@ -1,6 +1,12 @@
 import type Stripe from "stripe";
 
-import type { AnySQLiteColumn } from "drizzle-orm/sqlite-core";
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
+
+type StripeMock = {
+  customers: {
+    create: jest.Mock;
+  };
+};
 
 const createSelectChain = <T>(rows: T[]) => ({
   from: jest.fn().mockReturnThis(),
@@ -9,20 +15,20 @@ const createSelectChain = <T>(rows: T[]) => ({
   limit: jest.fn().mockResolvedValue(rows),
 });
 
-const setupBilling = async (stripeValue?: unknown) => {
+const createStripeMock = (): StripeMock => ({
+  customers: {
+    create: jest.fn(),
+  },
+});
+
+const setupBilling = async (stripeValue?: StripeMock | null) => {
   const dbMock = {
     select: jest.fn(),
     insert: jest.fn(),
   };
 
   const stripeMock =
-    typeof stripeValue === "undefined"
-      ? ({
-          customers: {
-            create: jest.fn(),
-          },
-        } as const)
-      : stripeValue;
+    typeof stripeValue === "undefined" ? createStripeMock() : stripeValue;
 
   jest.resetModules();
   jest.doMock("@/db", () => ({ __esModule: true, default: dbMock }));
@@ -130,6 +136,7 @@ describe("billing utilities", () => {
 
   it("getOrCreateStripeCustomerId returns existing id", async () => {
     const { billing, dbMock, stripeMock } = await setupBilling();
+    const stripe = stripeMock as StripeMock;
     const selectChain = createSelectChain([
       { stripeCustomerId: "cus_existing" },
     ]);
@@ -143,12 +150,13 @@ describe("billing utilities", () => {
     });
 
     expect(result).toBe("cus_existing");
-    expect(stripeMock.customers.create).not.toHaveBeenCalled();
+    expect(stripe.customers.create).not.toHaveBeenCalled();
     expect(dbMock.insert).not.toHaveBeenCalled();
   });
 
   it("getOrCreateStripeCustomerId creates and stores a customer", async () => {
     const { billing, dbMock, stripeMock } = await setupBilling();
+    const stripe = stripeMock as StripeMock;
     const selectChain = createSelectChain([]);
     const insertChain = {
       values: jest.fn().mockResolvedValue(undefined),
@@ -156,7 +164,7 @@ describe("billing utilities", () => {
 
     dbMock.select.mockReturnValue(selectChain);
     dbMock.insert.mockReturnValue(insertChain);
-    stripeMock.customers.create.mockResolvedValue({ id: "cus_new" });
+    stripe.customers.create.mockResolvedValue({ id: "cus_new" });
 
     const result = await billing.getOrCreateStripeCustomerId({
       userId: "user_1",
@@ -165,7 +173,7 @@ describe("billing utilities", () => {
     });
 
     expect(result).toBe("cus_new");
-    expect(stripeMock.customers.create).toHaveBeenCalledWith({
+    expect(stripe.customers.create).toHaveBeenCalledWith({
       email: "hello@example.com",
       name: "Hello",
       metadata: { userId: "user_1" },
@@ -179,6 +187,7 @@ describe("billing utilities", () => {
 
   it("getOrCreateStripeCustomerId omits null email and name", async () => {
     const { billing, dbMock, stripeMock } = await setupBilling();
+    const stripe = stripeMock as StripeMock;
     const selectChain = createSelectChain([]);
     const insertChain = {
       values: jest.fn().mockResolvedValue(undefined),
@@ -186,7 +195,7 @@ describe("billing utilities", () => {
 
     dbMock.select.mockReturnValue(selectChain);
     dbMock.insert.mockReturnValue(insertChain);
-    stripeMock.customers.create.mockResolvedValue({ id: "cus_nulls" });
+    stripe.customers.create.mockResolvedValue({ id: "cus_nulls" });
 
     const result = await billing.getOrCreateStripeCustomerId({
       userId: "user_2",
@@ -195,7 +204,7 @@ describe("billing utilities", () => {
     });
 
     expect(result).toBe("cus_nulls");
-    expect(stripeMock.customers.create).toHaveBeenCalledWith({
+    expect(stripe.customers.create).toHaveBeenCalledWith({
       email: undefined,
       name: undefined,
       metadata: { userId: "user_2" },
@@ -210,7 +219,7 @@ describe("billing utilities", () => {
       items: { data: [] },
       status: "active",
       cancel_at_period_end: false,
-    } as Stripe.Subscription;
+    } as unknown as Stripe.Subscription;
 
     await billing.upsertSubscription(stripeSubscription, "user_1");
 
@@ -240,7 +249,7 @@ describe("billing utilities", () => {
       },
       status: "active",
       cancel_at_period_end: false,
-    } as Stripe.Subscription;
+    } as unknown as Stripe.Subscription;
 
     await billing.upsertSubscription(stripeSubscription, "user_1");
 
@@ -271,7 +280,7 @@ describe("billing utilities", () => {
       items: { data: [{}] },
       status: "past_due",
       cancel_at_period_end: true,
-    } as Stripe.Subscription;
+    } as unknown as Stripe.Subscription;
 
     await billing.upsertSubscription(stripeSubscription, "user_2");
 
@@ -289,7 +298,7 @@ describe("billing utilities", () => {
     );
     expect(onConflictDoUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
-        target: expect.any(Object) as AnySQLiteColumn,
+        target: expect.any(Object) as AnyPgColumn,
         set: expect.objectContaining({
           priceId: "unknown-price",
           status: "past_due",

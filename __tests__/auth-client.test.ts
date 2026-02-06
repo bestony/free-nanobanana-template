@@ -1,3 +1,5 @@
+export {};
+
 const ORIGINAL_ENV = process.env;
 
 const createAuthClientMock = jest.fn(() => ({
@@ -9,11 +11,11 @@ const createAuthClientMock = jest.fn(() => ({
 const oneTapClientMock = jest.fn(() => "one-tap-plugin");
 
 jest.mock("better-auth/react", () => ({
-  createAuthClient: (...args: unknown[]) => createAuthClientMock(...args),
+  createAuthClient: createAuthClientMock,
 }));
 
 jest.mock("better-auth/client/plugins", () => ({
-  oneTapClient: (...args: unknown[]) => oneTapClientMock(...args),
+  oneTapClient: oneTapClientMock,
 }));
 
 describe("auth-client", () => {

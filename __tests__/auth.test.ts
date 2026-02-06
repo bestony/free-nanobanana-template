@@ -1,3 +1,5 @@
+export {};
+
 const ORIGINAL_ENV = process.env;
 
 const betterAuthMock = jest.fn(() => ({ authClient: true }));
@@ -5,15 +7,15 @@ const drizzleAdapterMock = jest.fn(() => "adapter");
 const oneTapMock = jest.fn(() => "one-tap");
 
 jest.mock("better-auth", () => ({
-  betterAuth: (...args: unknown[]) => betterAuthMock(...args),
+  betterAuth: betterAuthMock,
 }));
 
 jest.mock("better-auth/adapters/drizzle", () => ({
-  drizzleAdapter: (...args: unknown[]) => drizzleAdapterMock(...args),
+  drizzleAdapter: drizzleAdapterMock,
 }));
 
 jest.mock("better-auth/plugins", () => ({
-  oneTap: (...args: unknown[]) => oneTapMock(...args),
+  oneTap: oneTapMock,
 }));
 
 jest.mock("@/db", () => ({ __esModule: true, default: "db" }));
@@ -38,7 +40,7 @@ describe("auth config", () => {
     const authModule = await import("@/lib/auth");
 
     expect(drizzleAdapterMock).toHaveBeenCalledWith("db", {
-      provider: "sqlite",
+      provider: "pg",
     });
     expect(betterAuthMock).toHaveBeenCalledWith(
       expect.objectContaining({

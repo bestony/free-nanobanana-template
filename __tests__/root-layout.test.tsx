@@ -2,6 +2,18 @@ import type { ReactElement, ReactNode } from "react";
 
 import RootLayout, { metadata } from "@/app/layout";
 
+type RootLayoutElement = ReactElement<{
+  lang: string;
+  children: ReactElement<{
+    className: string;
+    children: ReactElement<{
+      children: ReactElement<{
+        children: string;
+      }>;
+    }>;
+  }>;
+}>;
+
 jest.mock("next/font/google", () => ({
   Inter: () => ({ variable: "mock-font" }),
 }));
@@ -21,12 +33,12 @@ describe("RootLayout", () => {
   it("renders html/body structure with providers", () => {
     const element = RootLayout({
       children: <div>Child content</div>,
-    }) as ReactElement;
+    }) as RootLayoutElement;
 
     expect(element.type).toBe("html");
     expect(element.props.lang).toBe("en");
 
-    const body = element.props.children as ReactElement;
+    const body = element.props.children;
 
     expect(body.type).toBe("body");
     expect(body.props.className).toContain("bg-white");
@@ -35,8 +47,8 @@ describe("RootLayout", () => {
     expect(body.props.className).toContain("antialiased");
     expect(body.props.className).toContain("mock-font");
 
-    const providers = body.props.children as ReactElement;
-    const content = providers.props.children as ReactElement;
+    const providers = body.props.children;
+    const content = providers.props.children;
 
     expect(content.props.children).toBe("Child content");
   });

@@ -19,7 +19,7 @@ Nano Banana 图像生成器的全栈模板。内置 Web UI、图像生成 API、
 ## 技术栈
 
 - Next.js 16 / React 19
-- Payload CMS 3（SQLite 适配器）
+- Payload CMS 3（PostgreSQL 适配器）
 - Vercel Blob SDK
 - Better Auth + Drizzle
 - Tailwind CSS
@@ -106,7 +106,7 @@ STRIPE_PRICE_ID_PRO=price_...
 - `payload/collections/`: Payload 集合
 - `__tests__/`: Jest 测试
 - `public/`: 静态资源
-- `payload.db`: Payload 本地 SQLite 数据库（默认）
+- 数据库连接：通过 `DATABASE_URL` 连接 PostgreSQL
 
 ## 图像生成与存储
 
@@ -124,7 +124,7 @@ STRIPE_PRICE_ID_PRO=price_...
 
 ## 数据库说明
 
-- Payload 使用 `DATABASE_URL`（必填）。
+- Payload 与 Drizzle 均使用 `DATABASE_URL`（必填，PostgreSQL）。
 
 ## 订阅计费说明
 
@@ -142,7 +142,7 @@ STRIPE_PRICE_ID_PRO=price_...
 ## 常见问题
 
 - Payload 初始化错误：`index ... already exists`
-  - 如果频繁修改 schema，可重置 `payload.db`，或临时在 `payload.config.ts` 中启用 schema push
+  - 检查 `DATABASE_URL` 是否可连接 PostgreSQL，并确认 schema 已正确迁移
 - Blob 上传失败
   - 检查 `BLOB_READ_WRITE_TOKEN` 是否存在且有效
 

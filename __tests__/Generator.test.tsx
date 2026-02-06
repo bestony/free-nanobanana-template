@@ -172,6 +172,9 @@ describe("Generator", () => {
   });
 
   it("handles network failures", async () => {
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     (global.fetch as jest.Mock) = jest
       .fn()
       .mockRejectedValue(new Error("oops"));
@@ -185,6 +188,9 @@ describe("Generator", () => {
     expect(
       await screen.findByText("Network error. Please try again."),
     ).toBeInTheDocument();
+
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
   });
 
   it("uses default error when API omits message", async () => {
